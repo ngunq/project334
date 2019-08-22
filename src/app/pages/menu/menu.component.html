@@ -1,0 +1,51 @@
+<h2>Quản lý thực đơn</h2>
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Tìm kiếm">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã món </th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên món </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+        </ng-container>
+
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Đơn giá </th>
+            <td mat-cell *matCellDef="let row"> {{row.price | numberfr }} </td>
+        </ng-container>
+
+        <!-- Quantity Column -->
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Định lượng </th>
+            <td mat-cell *matCellDef="let row"> {{row.quantityText}} </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+                <td mat-cell *matCellDef="let row">
+                    <button mat-button (click)="toggleEditMeal(row.id, row.name, row.price, row.quantity)">Chỉnh sửa</button>
+                </td>
+            </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+<p>* Giá gốc phụ thuộc vào định lượng</p>
+<button mat-raised-button class="action" color="primary" (click)="toggleAddMeal()">Thêm món</button>
+<app-add-meal *ngIf="addMeal"  (refresh)="addNewData($event)"></app-add-meal>
+<app-edit-meal *ngIf="editMeal"  [id]="id" [name]="name" [price]="price" [quantity]="quantity" (refresh)="updateData($event)"></app-edit-meal>

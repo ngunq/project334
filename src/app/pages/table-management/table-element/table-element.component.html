@@ -1,0 +1,20 @@
+<mat-card class="table-element" [class.not-availble]="!availble">
+    <img mat-card-image [src]="'../../../../assets/icons/rank-' + rank + '.png'" >
+    <mat-card-header>
+        <mat-card-title>{{ name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p>
+            {{ note }}
+        </p>
+    </mat-card-content>
+</mat-card>
+
+<!-- <div class="table-element" [class.not-availble]="!availble">
+    <div class="rank">
+        <img [src]="'../../../../assets/icons/rank-' + rank + '.png'" width="0">
+    </div>
+    <div class="info">
+        
+    </div>
+</div> -->

@@ -1,0 +1,14 @@
+.edit-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 16px;
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .quantity-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }

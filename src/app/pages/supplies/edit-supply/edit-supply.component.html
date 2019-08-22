@@ -1,0 +1,26 @@
+<div class="edit-container">
+    <mat-form-field>
+        <input matInput placeholder="Mã nguyên liệu" [(ngModel)]="id" disabled>
+    </mat-form-field>
+    <mat-form-field>
+
+        <input matInput placeholder="Tên nguyên liệu" [(ngModel)]="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="number" matInput placeholder="Đơn giá" [(ngModel)]="price">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="number" matInput placeholder="Tồn kho" [(ngModel)]="balance">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select placeholder="Loại hàng" [(ngModel)]="type">
+            <mat-option *ngFor="let t of types" [value]="t.id">{{t.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div class="actions">
+    <button mat-raised-button color="primary" (click)="updateSupply()">Cập nhật</button>
+</div>

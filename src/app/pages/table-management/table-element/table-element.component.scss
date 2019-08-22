@@ -1,0 +1,18 @@
+.table-element {
+    // max-width: 200px;
+    min-width: 180px;
+    max-width: 180px;
+    margin: 8px 1px;
+    cursor: pointer;
+}
+.not-availble {
+    background-color: #495057 !important;
+    color: white;
+}
+
+@media only screen and (max-width: 520px) {
+    .table-element {
+        max-width: 170px;
+        min-width: 160px;
+    }
+  }

@@ -1,0 +1,10 @@
+.add-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 16px;
+}
+
+.action {
+    display: flex;
+    justify-content: flex-end;
+}

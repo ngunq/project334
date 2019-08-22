@@ -1,0 +1,12 @@
+<h2>Đăng nhập</h2>
+<form class="example-container">
+    <mat-form-field>
+        <input matInput placeholder="Tên đăng nhập" name="username" [(ngModel)]="username" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput type="password" placeholder="Mật khẩu" name="pwd" [(ngModel)]="password" required>
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="action" color="primary" (click)="login()">Đăng nhập</button>
+</form>

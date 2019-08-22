@@ -1,0 +1,8 @@
+.list-item {
+    cursor: pointer;
+}
+
+.active {
+    font-weight: bold;
+    color: blue;
+}

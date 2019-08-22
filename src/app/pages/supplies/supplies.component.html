@@ -1,0 +1,67 @@
+<h2>Quản lý kho </h2>
+<h3>Tổng giá trị kho: {{calcTotalValue() | numberfr}} </h3>
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Tìm kiếm">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã hàng hóa </th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên nguyên liệu </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+        </ng-container>
+
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Đơn giá</th>
+            <td mat-cell *matCellDef="let row"> {{row.price | numberfr }} </td>
+        </ng-container>
+
+        <!-- Balance Column -->
+        <ng-container matColumnDef="balance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tồn kho </th>
+            <td mat-cell *matCellDef="let row"> {{row.balance | numberfr}} </td>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Loại hàng </th>
+            <td mat-cell *matCellDef="let row"> {{types[row.type]}} </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-button (click)="toggleEditSupply(row.id, row.name, row.price, row.balance, row.type)">Chỉnh
+                    sửa</button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+<div>
+    <br>
+    *Đơn vị tính của hàng hóa: <br>
+    - Thực phẩm: lạng (tức là 100gram)<br>
+    - Bia, nước: lon <br>
+    Ví dụ: Trong kho còn 1kg thịt bò (giá 200k/kg) => Tồn kho: 10 lạng, Đơn giá: 20k (giá 1 lạng)<br>
+    Trong kho còn 1 thùng bia (giá 240k/thùng) => Tồn kho: 24 lon, Đơn giá: 10k (giá 1 lon)
+</div>
+<button mat-raised-button class="action" color="primary" (click)="toggleAddSupply()">Thêm hàng hóa</button>
+<app-add-supply *ngIf="addSupply" (refresh)="addNewData($event)"></app-add-supply>
+<app-edit-supply *ngIf="editSupply" [id]="id" [name]="name" [price]="price" [balance]="balance" [type]="type"
+    (refresh)="updateData($event)"></app-edit-supply>

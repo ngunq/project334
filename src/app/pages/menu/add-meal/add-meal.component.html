@@ -1,0 +1,32 @@
+<div class="add-container">
+    <mat-form-field>
+        <input matInput placeholder="Tên món" [(ngModel)]="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="number" matInput placeholder="Giá gốc" [value]="calcOriginPrice()" disabled>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="number" matInput placeholder="Giá bán" [(ngModel)]="price">
+    </mat-form-field>
+    <!-- <button mat-raised-button color="primary" (click)="addMeal()">Thêm nguyên liệu</button> -->
+</div>
+<div class="quantity-box">
+    <div class="quantity" *ngFor="let q of quantity; let i = index">
+        <mat-form-field>
+            <mat-select placeholder="Nguyên liệu" [(ngModel)]="q.supply">
+                <mat-option *ngFor="let s of supplies" [value]="s.id">{{ s.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <input type="number" matInput placeholder="Định lượng" [(ngModel)]="q.value">
+        </mat-form-field>
+        <button mat-mini-fab color="warn" (click)="cancelQuantity(i)">Hủy</button>
+
+    </div>
+    <button mat-raised-button color="primary" (click)="addQuantity()">Thêm định lượng</button>
+</div>
+<div class="actions">
+    <button mat-raised-button color="primary" (click)="addMeal()">Thêm</button>
+</div>

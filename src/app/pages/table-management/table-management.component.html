@@ -1,0 +1,62 @@
+<div>
+    <h3>QUẢN LÝ BÀN</h3>
+    <!-- <div class="table-row">
+        <app-table-element name="Bàn 1" note="Bàn bên trong" [availble]="fixedTables.T1" routerLink="/table-detail/1"></app-table-element>
+        <app-table-element name="Bàn 2" note="Bàn bên trong" [availble]="fixedTables.T2" routerLink="/table-detail/2"></app-table-element>
+        <app-table-element name="Bàn 3" note="Bàn bên trong" [availble]="fixedTables.T3" routerLink="/table-detail/3"></app-table-element>
+        <app-table-element name="Bàn 4" note="Bàn bên trong" [availble]="fixedTables.T4" routerLink="/table-detail/4"></app-table-element>
+        <app-table-element name="Bàn 5" note="Bàn bên trong" [availble]="fixedTables.T5" routerLink="/table-detail/5"></app-table-element>
+    </div>
+    <div class="table-row">
+        <app-table-element name="Bàn 6" note="Bàn bên trong" [availble]="fixedTables.T6" routerLink="/table-detail/6"></app-table-element>
+        <app-table-element name="Bàn 7" note="Bàn bên trong" [availble]="fixedTables.T7" routerLink="/table-detail/7"></app-table-element>
+        <app-table-element name="Bàn 8" note="Bàn bên trong" [availble]="fixedTables.T8" routerLink="/table-detail/8"></app-table-element>
+        <app-table-element name="Bàn 9" note="Bàn bên trong" [availble]="fixedTables.T9" routerLink="/table-detail/9"></app-table-element>
+        <app-table-element name="Bàn 10" note="Bàn bên trong" [availble]="fixedTables.T10" routerLink="/table-detail/10"></app-table-element>
+    </div> -->
+
+    <button mat-raised-button color="primary" (click)="toggleAddTable()">Thêm bàn</button>
+    <!-- <h3>BÀN NGOÀI TRỜI</h3> -->
+    <div class="extra-table-row">
+        <app-table-element *ngFor="let t of extraTables" [rank]="t.rank" [name]="t.name" [note]="t.note"
+            [availble]="false" [routerLink]="'/table-detail/' + t.order_id"></app-table-element>
+    </div>
+    <app-add-table *ngIf="addTable" (updateExtraTables)="updateExtraTables($event)"></app-add-table>
+    <h3>BÀN ĐÃ THANH TOÁN</h3>
+    <div style="height: 200px; overflow: auto;">
+        <!-- <table border="1" style="width: 100%;">
+            <tr>
+                <th>Ngày giờ</th>
+                <th>Tên bàn</th>
+                <th>Ghi chú</th>
+            </tr>
+            <tr *ngFor="let t of paidTables" [routerLink]="'/table-detail/' + t.order_time + '/' + t.order_id" [state]="{ data: t.order_time}" style="cursor: pointer;">
+                <td>{{t.order_time}}</td>
+                <td>{{t.name}}</td>
+                <td>{{t.note}}</td>
+            </tr>
+        </table> -->
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Ngày giờ</th>
+                    <th scope="col">Tên bàn</th>
+                    <th scope="col">Ghi chú</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let t of paidTables" [routerLink]="'/table-detail/' + t.order_time + '/' + t.order_id"
+                    [state]="{ data: t.order_time}" style="cursor: pointer;">
+                    <!-- <tr *ngFor="let t of paidTables" (click)="navigator(t.order_time, t" style="cursor: pointer;"> -->
+                    <td>{{t.order_time}}</td>
+                    <td>{{t.name}}</td>
+                    <td>{{t.note}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <div class="extra-table-row">
+        <app-table-element *ngFor="let t of paidTables" [name]="t.name" [note]="t.note" [availble]="false" [routerLink]="'/table-detail/' + t.order_id"></app-table-element>
+    </div> -->
+</div>

@@ -1,0 +1,14 @@
+<div class="add-container">
+    <mat-form-field>
+        <input matInput placeholder="Tên bàn" [(ngModel)]="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <textarea matInput placeholder="Ghi chú" [(ngModel)]="note"></textarea>
+    </mat-form-field>
+
+</div>
+
+<div class="action">
+    <button mat-raised-button color="primary" (click)="addTable()">Thêm</button>
+</div>

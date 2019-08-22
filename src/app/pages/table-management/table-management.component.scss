@@ -1,0 +1,14 @@
+.table-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.extra-table-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    // app-table-element {
+    //     margin: 0 8px;
+    // }
+}

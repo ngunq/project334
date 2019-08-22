@@ -1,0 +1,88 @@
+<h3>THỐNG KÊ</h3>
+<!-- <mat-form-field class="date-picker"> -->
+<!-- <input matInput [matDatepicker]="picker" (dateChange)="changeDate($event.value)" placeholder="Chọn ngày"
+        [value]="date.value">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker> -->
+<input class="form-control" type="text" ngxDaterangepickerMd [(ngModel)]="dateRange" placeholder="Choose date" (change)="change($event)" />
+<!-- </mat-form-field> -->
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Tìm kiếm">
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+        <th mat-header-cell *matHeaderCellDef> {{columnName[column]}} </th>
+        <td mat-cell *matCellDef="let element">
+            {{column === 'order_time' ? element[column] : element[column] | numberfr}}
+        </td>
+    </ng-container>
+
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+            <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <table class="detail-bill">
+                    <tr>
+                        <th>Tên món</th>
+                        <th>SL</th>
+                        <th>Đ.Giá gốc</th>
+                        <th>Đ.Giá bán</th>
+                        <th>T.Tiền</th>
+                    </tr>
+                    <tr *ngFor="let ml of element.mealList">
+                        <td>{{ ml.name }}</td>
+                        <td>{{ ml.amount }}</td>
+                        <td>{{ ml.originPrice | numberfr }}</td>
+                        <td>{{ ml.price | numberfr }}</td>
+                        <td>{{ ml.total | numberfr }}</td>
+                    </tr>
+                </table>
+                <!-- <div class="example-element-diagram">
+          <div class="example-element-position"> {{element.position}} </div>
+          <div class="example-element-symbol"> {{element.symbol}} </div>
+          <div class="example-element-name"> {{element.name}} </div>
+          <div class="example-element-weight"> {{element.weight}} </div>
+        </div> -->
+                <!-- <div class="example-element-description">
+          {{element.description}}
+          <span class="example-element-description-attribution"> -- Wikipedia </span>
+        </div> -->
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</table>
+<table id="exportTable" hidden>
+    <tr>
+        <th>Thời gian</th>
+        <th>Tên bàn</th>
+        <th>Ghi chú</th>
+        <th>Giảm giá</th>
+        <th>Phụ thu</th>
+        <th>Tổng giá gốc</th>
+        <th>Tổng thu nhập</th>
+        <th>Lợi nhuận</th>
+    </tr>
+    <tr *ngFor="let d of exportData">
+        <td *ngFor="let f of columnsToDisplay">{{d[f]}}</td>
+    </tr>
+</table>
+
+<h4 class="mt-2">Tổng thu nhập: {{revenue | numberfr}}</h4>
+<h4>Tổng lợi nhuận: {{profit | numberfr}}</h4>
+
+<button mat-raised-button color="primary" (click)="fnExcelReport('exportTable')">Export Excel</button>
+
+<!-- <button mat-raised-button class="action" color="primary" (click)="toggleAddSupply()">Thêm hàng hóa</button>
+<app-add-supply *ngIf="addSupply" (refresh)="addNewData($event)"></app-add-supply>
+<app-edit-supply *ngIf="editSupply" [id]="id" [name]="name" [price]="price" [balance]="balance" [type]="type"
+    (refresh)="updateData($event)"></app-edit-supply> -->

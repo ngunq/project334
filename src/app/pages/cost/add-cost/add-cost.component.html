@@ -1,0 +1,19 @@
+<div class="add-container">
+    <mat-form-field>
+        <input matInput placeholder="Khoản chi" [(ngModel)]="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="number" matInput placeholder="Số tiền" [(ngModel)]="value">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select placeholder="Trạng thái" [(ngModel)]="status">
+            <mat-option *ngFor="let t of statusList" [value]="t.value">{{t.text}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div class="actions">
+    <button mat-raised-button color="primary" (click)="addCost()">Thêm</button>
+</div>

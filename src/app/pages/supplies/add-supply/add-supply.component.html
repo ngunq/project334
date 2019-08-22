@@ -1,0 +1,22 @@
+<div class="add-container">
+    <mat-form-field>
+        <input matInput placeholder="Tên hàng hóa" [(ngModel)]="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="number" matInput placeholder="Đơn giá" [(ngModel)]="price">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="number" matInput placeholder="Số lượng" [(ngModel)]="balance">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select placeholder="Loại hàng" [(ngModel)]="type">
+            <mat-option *ngFor="let t of types" [value]="t.id">{{t.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div class="actions">
+    <button mat-raised-button color="primary" (click)="addSupply()">Thêm</button>
+</div>
