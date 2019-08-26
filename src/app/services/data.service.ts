@@ -13,6 +13,7 @@ export class DataService {
   APIUrl = environment.APIUrl;
   username = environment.username;
   password = environment.password;
+  showMenu = true;
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -33,6 +34,7 @@ export class DataService {
 
   setActiveRoute(route) {
     this.activedRoute = route;
+    this.showMenu = false;
   }
 
   checkLogin(user: string, pwd: string) {

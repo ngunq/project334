@@ -9,6 +9,8 @@
 <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Tìm kiếm">
 </mat-form-field>
+<div id="chart-container" class="mt-3"></div>
+<button mat-raised-button class="float-right mb-2" color="primary" (click)="fnExcelReport('exportTable')">Export Excel</button>
 
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
     <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
@@ -59,8 +61,9 @@
         (click)="expandedElement = expandedElement === element ? null : element">
     </tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </table>
+<!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
+
 <table id="exportTable" hidden>
     <tr>
         <th>Thời gian</th>
@@ -77,10 +80,9 @@
     </tr>
 </table>
 
-<h4 class="mt-2">Tổng thu nhập: {{revenue | numberfr}}</h4>
-<h4>Tổng lợi nhuận: {{profit | numberfr}}</h4>
+<!-- <h4 class="mt-2">Tổng thu nhập: {{revenue | numberfr}}</h4> -->
+<!-- <h4>Tổng lợi nhuận: {{profit | numberfr}}</h4> -->
 
-<button mat-raised-button color="primary" (click)="fnExcelReport('exportTable')">Export Excel</button>
 
 <!-- <button mat-raised-button class="action" color="primary" (click)="toggleAddSupply()">Thêm hàng hóa</button>
 <app-add-supply *ngIf="addSupply" (refresh)="addNewData($event)"></app-add-supply>

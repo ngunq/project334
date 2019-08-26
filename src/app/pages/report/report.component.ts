@@ -5,9 +5,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from "../../services/data.service";
 import { TableInterface } from "../../interfaces";
 import { FormControl } from '@angular/forms';
-import  moment from "moment";
+import moment from "moment";
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import * as Highcharts from 'highcharts';
 
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 export const MY_FORMATS = {
@@ -42,6 +43,25 @@ export const MY_FORMATS = {
 
 
 export class ReportComponent implements OnInit {
+  public options: any = {
+    chart: {
+      type: 'column',
+      // height: 700
+    },
+    title: {
+      text: ''
+    },
+    credits: {
+      enabled: false
+    },
+    tooltip: {
+      shared: true,
+    },
+    yAxis: {
+      title: ""
+    },
+
+  }
   dataSource: MatTableDataSource<TableInterface>;
   date = new FormControl(moment()["_d"]);
   // dataSource = ELEMENT_DATA;
@@ -60,13 +80,14 @@ export class ReportComponent implements OnInit {
   meals = [];
   supplies = [];
   revenue = 0;
+  originPrice = 0;
   profit = 0;
   exportData = []
   ddd = moment().format("YYYY-MM-DD");
-  dateRange = {startDate: moment(), endDate: moment()}
+  dateRange = { startDate: moment().subtract(7, "days"), endDate: moment() }
 
-  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  // @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private data: DataService) {
     data.setActiveRoute("report");
@@ -81,6 +102,7 @@ export class ReportComponent implements OnInit {
   }
 
   getData(d) {
+    this.originPrice = 0;
     this.revenue = 0;
     this.profit = 0;
     const from = d.startDate.format("YYYY-MM-DD");
@@ -121,16 +143,89 @@ export class ReportComponent implements OnInit {
         })
         e.total = this.calcLastTotal(e.total, e.sale_off, e.extra_cost);
         this.revenue += e.total;
+        this.originPrice += e.originTotal
         e.profit = e.total - e.originTotal;
         this.profit += e.profit;
         return e;
       })
-      // console.log(tmp)
+      tmp.push({
+        order_time: "Tổng kết",
+        originTotal: this.originPrice,
+        total: this.revenue,
+        profit: this.profit
+      })
       this.exportData = tmp;
       this.dataSource = new MatTableDataSource(tmp);
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.parseChartSeries();
     })
+  }
+
+  buildTimeCategory(dateRange) {
+    const diff = moment(dateRange.endDate).diff(dateRange.startDate, `days`) + 1
+    let category = []
+    let format = "DD/MM/YYYY";
+    let startDate = moment(dateRange.startDate);
+
+    for (let index = 0; index < diff; index++) {
+      category = [
+        ...category,
+        startDate.format(format)
+      ]
+      startDate.add(1, `days`)
+    }
+
+    return category
+  }
+
+  parseChartSeries() {
+    let categories = this.buildTimeCategory(this.dateRange);
+    let revenueData = {};
+    let profitData = {};
+    this.exportData.forEach(e => {
+      const log_date = moment(e.order_time).format("DD/MM/YYYY");
+      if (log_date !== "Invalid date") {
+        if (!revenueData[log_date]) revenueData[log_date] = 0;
+        if (!profitData[log_date]) profitData[log_date] = 0;
+
+        revenueData[log_date] += e.total;
+        profitData[log_date] += e.profit;
+      }
+    })
+
+    let seriesData = {
+      revenue: [],
+      profit: []
+    };
+    categories.forEach(e => {
+      seriesData.revenue.push(revenueData[e] ? revenueData[e] : 0)
+      seriesData.profit.push(profitData[e] ? profitData[e] : 0)
+    })
+
+    let series = [
+      {
+        type: "column",
+        name: "Thu nhập",
+        data: seriesData.revenue,
+      },
+      {
+        type: "spline",
+        name: "Lợi nhuận",
+        data: seriesData.profit,
+      }
+    ];
+
+    this.options = {
+      ...this.options,
+      xAxis: {
+        categories: categories
+      },
+      series: series
+    }
+
+    Highcharts.chart('chart-container', this.options);
+
   }
 
   ngOnInit() {
@@ -186,7 +281,7 @@ export class ReportComponent implements OnInit {
   }
 
   change(e) {
-    console.log(e)
+    // console.log(e)
     this.dateRange = e;
     this.getData(e);
   }
@@ -197,8 +292,8 @@ export class ReportComponent implements OnInit {
       , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
       , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
       , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-      if (!table.nodeType) table = document.getElementById(table)
-      var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML, download: name }
-      window.location.href = uri + base64(format(template, ctx))
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML, download: name }
+    window.location.href = uri + base64(format(template, ctx))
   }
 }
